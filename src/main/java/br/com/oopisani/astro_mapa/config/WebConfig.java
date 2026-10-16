@@ -12,9 +12,9 @@ public class WebConfig implements WebMvcConfigurer {
 
     // Evita que a aplicação quebre na inicialização caso a propriedade de CORS
     // não esteja definida no application.yml (fallback de segurança)
-    @Value("${cors.originPatterns:default}")
+    @Value("${cors.allowed-origins:default}")
     // ${cors.originPatterns:default}: procura a propriedade cors.originPatterns; se ela não existir, usa o texto literal default.
-    private String corsOriginPatterns= "";
+    private String corsAllowedOrigins= "";
 
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
@@ -39,11 +39,13 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         // "Splita" o originPatterns do application.yaml em um array de strings
-        var allowedOrigins = corsOriginPatterns.split(",");
+        var allowedOrigins = corsAllowedOrigins.split(",");
         registry.addMapping("/**")
                 .allowedOrigins(allowedOrigins)
 
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
+
+                .allowedHeaders("*")
 
                 .allowCredentials(true);
     }
