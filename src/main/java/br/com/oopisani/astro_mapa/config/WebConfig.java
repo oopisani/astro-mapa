@@ -13,6 +13,7 @@ public class WebConfig implements WebMvcConfigurer {
     // Evita que a aplicação quebre na inicialização caso a propriedade de CORS
     // não esteja definida no application.yml (fallback de segurança)
     @Value("${cors.originPatterns:default}")
+    // ${cors.originPatterns:default}: procura a propriedade cors.originPatterns; se ela não existir, usa o texto literal default.
     private String corsOriginPatterns= "";
 
     @Override
@@ -39,13 +40,11 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         // "Splita" o originPatterns do application.yaml em um array de strings
         var allowedOrigins = corsOriginPatterns.split(",");
-        // Pode ser alterado para rotas específicas (ex: /api/v1/person/**)
         registry.addMapping("/**")
-                .allowedOriginPatterns(allowedOrigins)
-                // Opção 1: Liberar todos os verbos HTTP
-                .allowedMethods("*")
-                // Opção 2 (Alternativa): Se quiser restringir apenas a alguns verbos, descomente a linha abaixo:
-                // .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
+                .allowedOrigins(allowedOrigins)
+
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
+
                 .allowCredentials(true);
     }
 }

@@ -8,7 +8,7 @@ spring:
 #    url: jdbc:mysql://localhost:3306/astro-map?useTimeZone=true&serverTimeZone=UTC
 #    username: root
 #    password: MyNewPass
-    url: ${DB_URL}
+    url: ${DB_URL:jdbc:mysql://localhost:3306/astro-map?useTimeZone=true&serverTimeZone=UTC}
     username: ${DB_USER}
     password: ${DB_PASS}
 
